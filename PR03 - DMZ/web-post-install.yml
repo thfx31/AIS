@@ -1,0 +1,23 @@
+---
+- name: Web SRV post install
+  hosts : WEB
+  become: true
+  tasks:
+    - name: set gateway
+      ansible.builtin.lineinfile:
+        path: /etc/network/interfaces
+        insertafter: "^255.255.255.0"
+        line: "gateway 192.168.100.254"
+  
+    - name: install packages
+      ansible.builtin.apt:
+        pkg:
+        - nginx
+        - vim
+        - net-tools
+        update_cache: yes
+
+    - name: defaut gateway
+      ansible.builtin.shell: route add default gw 192.168.100.254 eth1
+        
+

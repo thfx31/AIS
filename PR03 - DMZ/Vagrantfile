@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# WIP - Déploiement PR03 avec Vagrant + provisionnement SHELL/ANSIBLE
+
+RAM = 1024
+CPU = 1
+
+Vagrant.configure("2") do |config|
+
+  # Configure router/FW machine
+  config.vm.define "RTRFW" do |rt|
+    rt.vm.box = "debian/bullseye64"
+    rt.vm.hostname = "RTRFW"
+    rt.vm.network "public_network", ip: "192.168.1.235", bridge: "wlp44s0"
+    rt.vm.network "private_network", ip: "192.168.100.254", virtualbox__intnet: "DMZ"
+    rt.vm.network "private_network", ip: "172.16.1.254", virtualbox__intnet: "LAN"
+    rt.vm.provision "shell", path: "firewall.sh"
+  end
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = RAM
+    vb.cpus = CPU
+    end
+
+  # Configure WEB machine
+  config.vm.define "WEB" do |web|
+    web.vm.box = "debian/bullseye64"
+    web.vm.hostname = "WEB"
+    web.vm.network "private_network", ip: "192.168.100.10", virtualbox__intnet: "DMZ"
+    web.vm.provision "ansible_local" do |ansible|
+      ansible.playbook = "web-post-install.yml"
+    end
+  end
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = RAM
+    vb.cpus = CPU
+    end
+  
+  # Configure DB machine
+  config.vm.define "DB" do |db|
+    db.vm.box = "debian/bullseye64"
+    db.vm.hostname = "DB"
+    db.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: "LAN"
+  end
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = RAM
+    vb.cpus = CPU
+    end
+end
