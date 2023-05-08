@@ -6,6 +6,3 @@
 ## Script Firewall
 Opérationnel
 
-## Vagrant file + web-post-install.yml
-/!\ WIP - Non opérationnel 
-Home lab : test de déploiement automatisé du lab  
