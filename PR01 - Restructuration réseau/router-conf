@@ -1,0 +1,20 @@
+en
+conf t
+hostname R01-TF
+
+interface gig0/0
+no shutdown
+int g0/0.10
+encapsulation dot1q 10
+ip address 192.168.10.254 255.255.255.0
+ip helper-address 192.168.20.1
+
+int g0/0.20
+encapsulation dot1q 20
+ip address 192.168.20.254 255.255.255.0
+ip helper-address 192.168.20.1
+
+int g0/0.30
+encapsulation dot1q 30
+ip address 192.168.30.254 255.255.255.0
+ip helper-address 192.168.20.1

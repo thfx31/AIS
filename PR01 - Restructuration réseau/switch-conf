@@ -1,0 +1,30 @@
+enable
+configure terminal
+hostname SW01-TF
+
+vlan 10
+name administratif
+vlan 20
+name serveur
+vlan 30
+name formation
+vlan 99
+name parking
+
+interface range fa1/0/1-46
+switchport mode access
+switchport access vlan 99
+shutdown
+
+interface range g1/0/1-4
+switchport mode access
+switchport access vlan 99
+shutdown
+
+interface fa1/0/48
+switchport trunk encapsulation dot1q
+switchport mode trunk
+
+interface g1/0/1
+switchport trunk encapsulation dot1q
+switchport mode trunk
