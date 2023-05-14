@@ -1,9 +1,11 @@
 en
 conf t
-hostname R01-TF
+hostname RT01
+ip domain name thfx.org
 
 interface gig0/0
 no shutdown
+
 int g0/0.10
 encapsulation dot1q 10
 ip address 192.168.10.254 255.255.255.0
@@ -18,3 +20,34 @@ int g0/0.30
 encapsulation dot1q 30
 ip address 192.168.30.254 255.255.255.0
 ip helper-address 192.168.20.1
+
+int g0/0.50
+encapsulation dot1q 50
+ip address 192.168.50.254 255.255.255.0
+
+end
+conf t
+service password-encryption
+enable secret 556p13HY.9%
+
+exit
+show ip ssh
+
+conf t
+crypto key generate rsa general-keys modulus 1024
+
+ip ssh version 2
+ip ssh logging events
+ip ssh time-out 60
+ip ssh authentification-retries 3
+
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+username admin secret rT!P@55w0rd
+
+line vty 0 15
+transport input ssh
+
+end
+show ip ssh

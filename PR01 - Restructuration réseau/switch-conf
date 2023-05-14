@@ -1,6 +1,9 @@
 enable
 configure terminal
-hostname SW01-TF
+en
+conf t
+hostname SW01
+ip domain name thfx.org
 
 vlan 10
 name administratif
@@ -8,8 +11,15 @@ vlan 20
 name serveur
 vlan 30
 name formation
+vlan 50
+name management
 vlan 99
 name parking
+
+interface vlan 50
+ip address 192.168.50.10 255.255.255.0
+exit
+ip default-gateway 192.168.50.254
 
 interface range fa1/0/1-46
 switchport mode access
@@ -21,10 +31,41 @@ switchport mode access
 switchport access vlan 99
 shutdown
 
-interface fa1/0/48
+interface fa1/0/47
+description link to hyperV
 switchport trunk encapsulation dot1q
 switchport mode trunk
+switchport trunk allowed vlan add 1,10,20,30,50
 
-interface g1/0/1
+interface fa1/0/48
+description link to R1
 switchport trunk encapsulation dot1q
 switchport mode trunk
+switchport trunk allowed vlan add 1,10,20,30,50
+
+end
+conf t
+service password-encryption
+enable secret 556p13HY.9%
+
+exit
+show ip ssh
+
+conf t
+crypto key generate rsa general-keys modulus 1024
+
+ip ssh version 2
+ip ssh logging events
+ip ssh time-out 60
+ip ssh authentification-retries 3
+
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+username admin secret sW!P@55w0rd
+
+line vty 0 15
+transport input ssh
+
+end
+show ip ssh
