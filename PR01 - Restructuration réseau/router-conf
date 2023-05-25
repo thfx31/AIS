@@ -4,7 +4,7 @@ enable
 clock set 09:37:30 May 25 2023
 conf t
 hostname RT01
-ip domain name thfx.org
+ip domain name adrar.lan
 
 !--- Interfaces
 !--- Configuration interface gig0/0

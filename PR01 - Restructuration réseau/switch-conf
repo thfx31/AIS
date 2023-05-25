@@ -1,10 +1,10 @@
 ﻿!--- Configuration de base
 !--- Remplacer l'heure par la date du jour au format hh:mm:ss month day year
-
-clock set 13:40:30 May 25 2023
+enable
+clock set 15:46:30 May 25 2023
 conf t
 hostname SW01
-ip domain name thfx.org
+ip domain name adrar.lan
 
 !--- VLAN
 !--- Déclaration des VLAN
