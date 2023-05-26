@@ -1,10 +1,10 @@
 ﻿enable
 conf t
 ip access-list extended VLAN30_IN
-permit tcp 192.168.30.0 0.0.0.255 host 192.168.20.2 eq 80
-permit tcp 192.168.30.0 0.0.0.255 host 192.168.20.2 eq 443
 permit udp any eq bootpc any eq bootps
 permit udp any any eq domain
+permit tcp 192.168.30.0 0.0.0.255 host 192.168.20.2 eq 80
+permit tcp 192.168.30.0 0.0.0.255 host 192.168.20.2 eq 443
 permit icmp 192.168.30.0 0.0.0.255 host 192.168.10.25 echo-reply
 deny ip any any
 interface Gig0/0.30
@@ -12,14 +12,15 @@ ip access-group VLAN30_IN in
 
 
 ip access-list extended VLAN10_IN
-permit udp any any eq domain
 permit udp any eq bootpc any eq bootps
+permit udp any any eq domain
 permit tcp 192.168.10.0 0.0.0.255 host 192.168.20.2 eq 80
 permit tcp 192.168.10.0 0.0.0.255 host 192.168.20.2 eq 443
 permit tcp host 192.168.10.25 host 192.168.20.3 eq ftp
-permit ip 192.168.10.0 0.0.0.255 host 192.168.20.5
 permit ip host 192.168.10.25 192.168.30.0 0.0.0.255
-permit tcp host 192.168.10.25 host 192.168.10.200 eq 22
+permit tcp host 192.168.10.25 host 192.168.100.10 eq 22
+permit tcp host 192.168.10.25 host 192.168.100.254 eq 22
+permit ip 192.168.10.0 0.0.0.255 host 192.168.20.5
 permit icmp 192.168.10.0 0.0.0.255 any
 deny ip any any
 interface Gig0/0.10
