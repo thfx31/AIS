@@ -1,0 +1,31 @@
+!-ASA-TLSE
+en
+conf t
+hostname ASA-TLSE
+crypto ipsec ikev1 transform-set ipsec-set esp-3des esp-md5-hmac
+
+crypto map ipsec-map 10 match address 1
+crypto map ipsec-map 10 set peer 155.2.47.54
+crypto map ipsec-map 10 set ikev1 transform-set ipsec-set
+crypto map ipsec-map interface outside
+crypto ikev1 enable outside
+crypto ikev1 policy 1
+encr 3des
+authentication pre-share
+group 2
+lifetime 43200
+tunnel-group 155.2.47.54 type ipsec-l2l
+tunnel-group 155.2.47.54 ipsec-attributes
+ikev1 pre-shared-key cisco123
+
+route outside 0.0.0.0 0.0.0.0 10.1.1.2
+
+
+access-list 1 extended permit ip 192.168.30.0 255.255.255.0 172.16.3.0 255.255.255.0
+access-list DMZ_OUTSIDE extended permit ip host 192.168.30.1 any
+access-list LAN-DMZ_OUTSIDE extended permit ip any host 192.168.30.1
+access-list LAN-DMZ_OUTSIDE extended permit icmp 172.16.3.0 255.255.255.0 192.168.10.0 255.255.255.0
+
+access-group DMZ_OUTSIDE in interface dmz
+access-group LAN-DMZ_OUTSIDE in interface outside 
+

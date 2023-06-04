@@ -1,0 +1,24 @@
+en
+conf t
+hostname ISP-TLSE
+
+!--Configuration interface LAN
+interface gig0/0
+description link_to_ASA_TLSE
+ip addr 10.1.1.2 255.255.255.248
+no shut
+
+!--Configuration interface WAN
+interface gig0/1
+description link_to_ISP-PARIS
+ip addr 201.122.100.13 255.255.255.252
+no shut
+
+!--Ajout des routes
+ip route 0.0.0.0 0.0.0.0 201.122.100.14 
+ip route 192.168.10.0 255.255.255.0 10.1.1.1 
+ip route 192.168.30.0 255.255.255.0 10.1.1.1 
+
+
+
+

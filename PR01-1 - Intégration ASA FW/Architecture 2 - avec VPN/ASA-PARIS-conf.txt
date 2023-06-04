@@ -1,0 +1,31 @@
+!-ASA-PARIS
+en
+conf t
+hostname ASA-PARIS
+
+crypto ipsec ikev1 transform-set ipsec-set esp-3des esp-md5-hmac
+
+crypto map ipsec-map 10 match address 1
+crypto map ipsec-map 10 set peer 10.1.1.1
+crypto map ipsec-map 10 set ikev1 transform-set ipsec-set
+crypto map ipsec-map interface outside
+crypto ikev1 enable outside
+crypto ikev1 policy 1
+encr 3des
+authentication pre-share
+group 2
+lifetime 43200
+tunnel-group 10.1.1.1 type ipsec-l2l
+tunnel-group 10.1.1.1 ipsec-attributes
+ikev1 pre-shared-key cisco123
+
+route outside 0.0.0.0 0.0.0.0 155.2.47.53
+
+access-list 1 extended permit ip 172.16.3.0 255.255.255.0 192.168.30.0 255.255.255.0
+access-list OUTSIDE_LAN extended permit icmp 192.168.10.0 255.255.255.0 172.16.3.0 255.255.255.0
+access-list OUTSIDE_LAN extended permit ip 192.168.30.0 255.255.255.0 172.16.3.0 255.255.255.0
+
+access-group OUTSIDE_LAN in interface outside
+
+
+

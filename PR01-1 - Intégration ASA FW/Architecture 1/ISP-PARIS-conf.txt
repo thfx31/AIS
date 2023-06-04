@@ -1,0 +1,22 @@
+en
+conf t
+hostname ISP-PARIS
+
+!--Configuration interface LAN
+interface gig0/0
+description link_to_LAN-PARIS
+ip addr 172.16.3.254 255.255.255.0
+no shut
+
+!--Configuration interface WAN
+interface gig0/1
+description link_to_ISP-TLSE
+ip addr 201.122.100.14 255.255.255.252
+no shut
+
+!--Ajout des routes
+ip route 0.0.0.0 0.0.0.0 201.122.100.13
+
+
+
+

@@ -1,0 +1,31 @@
+en
+conf t
+hostname ASA-PARIS
+
+!--Configuration interface outside
+int gig1/1
+ip addr 155.2.47.54 255.255.255.252
+nameif outside
+security-level 0
+no shut
+
+!--Configuration interface inside
+int gig1/2
+ip address 172.16.3.254 255.255.255.0
+nameif inside
+security-level 100
+no shut
+
+!--Ajout de la route par défaut
+route outside 0.0.0.0 0.0.0.0 155.2.47.53
+
+!---ACL
+!--Autorise ICMP depuis le LAN PARIS vers le LAN TLSE
+access-list OUTSIDE_LAN extended permit icmp 192.168.10.0 255.255.255.0 172.16.3.0 255.255.255.0
+!--Autorise ICMP/HTTP depuis le LAN PARIS vers la DMZ
+access-list OUTSIDE_LAN extended permit ip 192.168.30.0 255.255.255.0 172.16.3.0 255.255.255.0
+!--Application des ACL
+access-group OUTSIDE_LAN in interface outside
+
+
+
