@@ -1,0 +1,15 @@
+---
+# vars file for glpi
+http_host: test
+
+glpi_db_host: "localhost"
+glpi_db_port: "3306"
+glpi_db_name: "db_glpi"
+glpi_db_user: "admin"
+glpi_db_password: "Test_34535$"
+
+root_password: "passwd"
+
+glpi_install_path: "/var/www/html/{{ http_host }}"
+
+

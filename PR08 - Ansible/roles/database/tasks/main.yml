@@ -1,0 +1,65 @@
+---
+- name: install mysql
+  apt:
+    name: 
+      - mysql-server
+      - python3-mysqldb # for mysql_db and mysql_user modules
+    state: present
+    update_cache: yes
+
+- name: ensure mysql service is start
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Allow external MySQL connections (1/2)
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^skip-external-locking'
+    line: "# skip-external-locking"
+  notify: Restart mysql
+  
+- name: Allow external MySQL connections (2/2)
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: "# bind-address"
+  notify: Restart mysql
+  
+- name: Create MySQL client config
+  copy:
+    dest: "/root/.my.cnf"
+    content: |
+      [client]
+      user=root
+      password={{ root_password }}
+    mode: 0400  
+
+- name: upload sql table config
+  template:
+    src: "table.sql.j2"
+    dest: "/tmp/table.sql"
+
+- name: add sql table to database
+  mysql_db:
+    name: "{{ mysql_dbname }}"
+    state: present
+    login_user: root
+    login_password: '{{ root_password }}'
+    state: import 
+    target: /tmp/table.sql
+
+
+- name: "Create {{ mysql_user }} with all {{ mysql_dbname }} privileges"
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_dbname }}.*:ALL"
+    host: localhost
+    state: present
+    login_user: root
+    login_password: '{{ root_password }}'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  when: ansible_facts['os_family'] == "Debian"
+  notify: Restart mysql

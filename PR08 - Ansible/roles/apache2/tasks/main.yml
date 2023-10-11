@@ -1,0 +1,13 @@
+---
+- name: Install Apache
+  ansible.builtin.import_tasks: install.yml
+
+#- name: Configure Apache
+#  ansible.builtin.import_tasks: configure.yml
+
+#- name: Ensure Apache has selected state and enabled on boot
+#  ansible.builtin.service:
+#    name: "{{ apache_service }}"
+#    state: "{{ apache_state }}"
+#    enabled: true
+  

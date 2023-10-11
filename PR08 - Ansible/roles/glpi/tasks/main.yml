@@ -1,0 +1,21 @@
+---
+- name: Download and unarchive GLPI archive
+  ansible.builtin.unarchive:
+    src: https://github.com/glpi-project/glpi/releases/download/10.0.10/glpi-10.0.10.tgz
+    dest: "/var/www/html/{{ http_host }}"
+    owner: www-data
+    group: www-data
+    remote_src: yes
+
+- name: Connexion database
+  mysql_db:
+    login_user: root
+    login_password: "{{  root_password  }}"
+    name: "{{  glpi_db_name  }}"
+
+- name: GLPI installation
+  command: 
+    "php bin/console -n db:install -H {{  glpi_db_host  }} -P {{  glpi_db_port  }} -d {{  glpi_db_name  }} -u {{  glpi_db_user  }} -p {{  glpi_db_password  }} --reconfigure --force"
+  args:
+    chdir: "{{  glpi_install_path  }}/glpi"
+  

@@ -1,0 +1,60 @@
+---
+- name: Install Mariadb Server
+  ansible.builtin.apt:
+    name: 
+     - mariadb-server
+     - python3-pymysql
+    state: present
+    update_cache: yes
+
+- name: Set MySql root password
+  community.mysql.mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: root
+    password: "{{  mysql_root_pwd  }}"
+    host_all: true
+    check_implicit_admin: yes
+
+- name: Create MySql user
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{  mysql_root_pwd  }}"
+    name: "{{  mysql_user }}"
+    password: "{{  mysql_user_pwd }}"
+    host: localhost
+    state: present
+
+- name: Create Database
+  community.mysql.mysql_db:
+    login_user: root
+    login_password: "{{  mysql_root_pwd  }}"
+    name: "{{  mysql_db_name  }}"
+    state: present
+
+- name: Grant privileges to MySQL user on GLPI db
+  community.mysql.mysql_user:
+    name: root
+    password: "{{  mysql_root_pwd  }}"
+    name: "{{  mysql_user }}"
+    password: "{{  mysql_user_pwd }}"
+    host: localhost
+    priv: "GLPI.*:ALL"
+    state: present
+
+- name: Allow remote connections
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{  mysql_root_pwd  }}"
+    name: "{{  mysql_user }}"
+    password: "{{  mysql_user_pwd }}"
+
+    
+
+
+
+    
+
+
+  
+
+

@@ -1,0 +1,64 @@
+---
+- name: install apache and php last version
+  ansible.builtin.apt:
+    name: ['apache2', 'php', 'php-mysql']
+    state: present
+    update_cache: yes
+
+- name: install extra packages
+  ansible.builtin.apt:
+    name: "{{ extra_packages }}"
+    state: present
+
+- name: Give writable mode to http folder
+  ansible.builtin.file:
+    #path: "/var/www/html"
+    path: "/var/www/html/{{ http_host }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+#- name: remove default index.html
+#  file:
+#  path: /var/www/html/index.html
+#  state: absent
+
+- name: Copy test page
+  ansible.builtin.template:
+    src: templates/index-template.html
+    #dest: "/var/www/html/index.html"
+    dest: "/var/www/html/{{ http_host }}/index.html"
+
+- name: Set up virtualhost
+  ansible.builtin.template:
+    src: templates/apache-template.conf
+    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+
+- name: Enable new site
+  ansible.builtin.command: a2ensite {{  http_conf  }}
+  notify: "Restart Apache"
+
+- name: Install UFW ## a vérifier pour Debian
+  ansible.builtin.package:
+    name: ufw
+    state: latest
+
+  
+- name: UFW firewall allow HTTP on port {{  http_port  }}
+  ufw:
+    rule: allow
+    port: "{{  http_port  }}"
+    proto: tcp
+
+- name: UFW firewall allow HTTPS on port {{  https_port  }}
+  ufw:
+    rule: allow
+    port: "{{  https_port  }}"
+    proto: tcp
+
+#- name: deploy php database config
+#  ansible.builtin.template:
+#  src: "db-config.php.j2"
+#  dest: "/var/www/html/db-config.php"
+
