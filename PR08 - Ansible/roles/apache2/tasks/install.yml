@@ -1,5 +1,0 @@
----
-- name: Ensure Apache and related packages are installed
-  ansible.builtin.apt:
-    name: "{{ apache_packages }}"
-    state: "{{ apache_packages_state }}"
