@@ -1,6 +1,0 @@
----
-- hosts: glpi-servers
-  become: yes
-
-  roles:
-    - glpi
