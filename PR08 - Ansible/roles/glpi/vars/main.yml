@@ -1,5 +1,4 @@
 ---
-# vars file for glpi
 http_host: test
 
 glpi_db_host: "localhost"

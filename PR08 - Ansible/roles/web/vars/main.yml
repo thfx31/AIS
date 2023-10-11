@@ -1,5 +1,4 @@
 ---
-# vars file for web
 http_host: test
 http_conf: test.conf
 http_port: 80
