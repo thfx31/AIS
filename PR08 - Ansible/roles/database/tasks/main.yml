@@ -18,14 +18,14 @@
     path: /etc/mysql/mariadb.conf.d/50-server.cnf
     regexp: '^skip-external-locking'
     line: "# skip-external-locking"
-  notify: Restart mysql
+  notify: "Restart MariaDB Serveur"
   
 - name: Allow external MariaDB connections (2/2)
   ansible.builtin.lineinfile:
     path: /etc/mysql/mariadb.conf.d/50-server.cnf
     regexp: '^bind-address'
     line: "# bind-address"
-  notify: Restart mysql
+  notify: "Restart MariaDB Serveur"
   
 - name: Create MariaDB client config
   ansible.builtin.copy:
@@ -60,4 +60,4 @@
     login_user: root
     login_password: '{{ root_password }}'
     login_unix_socket: /var/run/mysqld/mysqld.sock
-  notify: "Restart MariaBD Serveur"
+  notify: "Restart MariaDB Serveur"

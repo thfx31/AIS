@@ -9,7 +9,7 @@
 
 - name: GLPI installation
   command: 
-    "php bin/console -n db:install -H {{  glpi_db_host  }} -P {{  glpi_db_port  }} -d {{  glpi_db_name  }} -u {{  glpi_db_user  }} -p {{  glpi_db_password  }} --reconfigure --force"
+    "php bin/console -n db:install -H {{  glpi_db_host  }} -P {{  glpi_db_port  }} -d {{  glpi_db_name  }} -u {{  glpi_db_user  }} -p {{  glpi_db_password  }} -L fr_FR --reconfigure --force"
   args:
     chdir: "{{  glpi_install_path  }}"
 
