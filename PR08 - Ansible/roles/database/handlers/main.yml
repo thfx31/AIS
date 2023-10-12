@@ -1,5 +1,5 @@
 ---
-- name: Restart mysql
+- name: "Restart MariaBD Serveur"
   service:
     name: mysql
     state: restarted

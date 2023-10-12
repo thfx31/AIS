@@ -3,3 +3,8 @@
   ansible.builtin.service:
     name: apache2
     state: restarted
+
+- name: "Start UFW"
+  ansible.builtin.service:
+    name: ufw
+    state: started

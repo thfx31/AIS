@@ -1,49 +1,59 @@
 ---
-- name: install apache and php last version
-  ansible.builtin.apt:
+- name: Install Apache and PHP
+  ansible.builtin.package:
     name: ['apache2', 'php', 'php-mysql']
     state: present
     update_cache: yes
 
-- name: install extra packages
-  ansible.builtin.apt:
+- name: Install extra packages
+  ansible.builtin.package:
     name: "{{ extra_packages }}"
     state: present
 
 - name: Give writable mode to http folder
   ansible.builtin.file:
-    #path: "/var/www/html"
-    path: "/var/www/html/{{ http_host }}"
+    path: "/var/www/glpi/"
     state: directory
     owner: www-data
     group: www-data
     mode: '0755'
 
-#- name: remove default index.html
-#  file:
-#  path: /var/www/html/index.html
-#  state: absent
+# - name: Set up virtualhost
+#   ansible.builtin.template:
+#     src: templates/apache-template.conf
+    #dest: "/etc/apache2/sites-available/{{ http_conf }}"
 
-- name: Copy test page
-  ansible.builtin.template:
-    src: templates/index-template.html
-    #dest: "/var/www/html/index.html"
-    dest: "/var/www/html/{{ http_host }}/index.html"
-
+# - name: Delete default vhosts in site-enabled
+#   ansible.builtin.file:
+#     path: "{{ apache_server_conf }}/sites-enabled/{{ item }}"
+#     state: absent
+#   with_items: "{{ apache_default_vhost_filename }}"
+#   notify: Restart apache
+#   when: apache_remove_default_vhost
+  
 - name: Set up virtualhost
   ansible.builtin.template:
-    src: templates/apache-template.conf
-    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+    src: templates/glpi-tmp.conf
+    dest: "/etc/apache2/sites-available/glpi.conf"
+
+# - name: Delete default vhosts in site-enabled
+#   ansible.builtin.file:
+#     path: /etc/apache2/sites-enabled/000-default.conf
+#     state: absent
+
+- name: Activate a2enmod rewrite
+  ansible.builtin.command: a2enmod rewrite
 
 - name: Enable new site
-  ansible.builtin.command: a2ensite {{  http_conf  }}
+  #ansible.builtin.command: a2ensite {{  http_conf  }}
+  ansible.builtin.command: a2ensite glpi.conf
   notify: "Restart Apache"
 
-- name: Install UFW ## a vérifier pour Debian
+- name: Install UFW Firewall
   ansible.builtin.package:
     name: ufw
     state: latest
-
+  notify: "Start UFW"
   
 - name: UFW firewall allow HTTP on port {{  http_port  }}
   ufw:
@@ -56,9 +66,3 @@
     rule: allow
     port: "{{  https_port  }}"
     proto: tcp
-
-#- name: deploy php database config
-#  ansible.builtin.template:
-#  src: "db-config.php.j2"
-#  dest: "/var/www/html/db-config.php"
-

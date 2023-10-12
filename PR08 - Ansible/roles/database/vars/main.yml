@@ -1,6 +1,0 @@
----
-root_password: "passwd"
-
-mysql_user: "admin"
-mysql_password: "Test_34535$"
-mysql_dbname: "db_glpi"
