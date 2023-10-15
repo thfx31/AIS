@@ -4,12 +4,6 @@
     name: apache2
     state: restarted
 
-- name: "Start UFW"
-  ansible.builtin.service:
-    name: ufw
-    state: started
-
 - name: "Reload UFW"
-  service:
-    name: ufw
-    state: restarted
+  community.general.ufw:
+    state: reloaded

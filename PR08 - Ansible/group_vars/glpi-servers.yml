@@ -10,13 +10,19 @@ php_extra_packages:
 - php-zip
 - php-bz2
 
-# Apache2 settings
-http_host: "glpi.deploy"
-http_conf: "glpi.conf"
+# Apache2 vars
+http_host: glpi.deploy
+http_conf: 001-glpi.conf
 http_port: 80
 https_port: 443
 
-# Database variables
+# SSL vars
+ssl_csr_directory: /etc/ssl/csr
+ssl_csr_email: "tf.test@tuta.io"
+ssl_crt_directory: /etc/ssl/certs
+ssl_privkey_directory: /etc/ssl/private
+
+# Database vars
 glpi_db_host: "localhost"
 glpi_db_port: "3306"
 glpi_db_root_password: "passwd"
@@ -24,5 +30,5 @@ glpi_db_name: "db_glpi"
 glpi_db_user: "admin"
 glpi_db_password: "Test_34535$"
 
-# GLPI variables
-glpi_install_path: "/var/www/glpi"
+# GLPI vars
+glpi_install_path: /var/www/glpi

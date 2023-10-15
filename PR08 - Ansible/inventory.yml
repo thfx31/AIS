@@ -3,7 +3,7 @@ all:
   children:
     glpi-servers:
       hosts:
-        node01:
+        node02:
 
 
 # Ex 1: Ungrouped hosts, specify before any group headers:
