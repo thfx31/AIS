@@ -34,3 +34,6 @@
 
 - name: Install and configure UFW
   ansible.builtin.import_tasks: ufw.yml
+
+- name: Install and configure Fail2ban
+  ansible.builtin.import_tasks: fail2ban.yml
