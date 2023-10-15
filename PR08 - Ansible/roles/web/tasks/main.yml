@@ -1,22 +1,14 @@
 ---
 - name: Install Apache and PHP
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name: ['apache2', 'php', 'php-mysql']
     state: present
     update_cache: yes
 
 - name: Install extra packages
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name: "{{ extra_packages }}"
     state: present
-
-- name: Give writable mode to http folder
-  ansible.builtin.file:
-    path: "/var/www/glpi/"
-    state: directory
-    owner: www-data
-    group: www-data
-    mode: '0755'
 
 # - name: Set up virtualhost
 #   ansible.builtin.template:
@@ -50,9 +42,9 @@
   notify: "Restart Apache"
 
 - name: Install UFW Firewall
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name: ufw
-    state: latest
+    state: present
   notify: "Start UFW"
   
 - name: UFW firewall allow HTTP on port {{  http_port  }}
@@ -60,9 +52,11 @@
     rule: allow
     port: "{{  http_port  }}"
     proto: tcp
+  notify: "Reload UFW"
 
 - name: UFW firewall allow HTTPS on port {{  https_port  }}
   ufw:
     rule: allow
     port: "{{  https_port  }}"
     proto: tcp
+  notify: "Reload UFW"

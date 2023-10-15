@@ -1,11 +1,11 @@
 ---
 - name: Install MariaDB Server
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name: 
       - mariadb-server
       - python3-mysqldb
     state: present
-    update_cache: yes
+    update_cache: yes  
 
 - name: Ensure mariadb service is start
   ansible.builtin.service:
@@ -13,19 +13,16 @@
     state: started
     enabled: yes
 
-- name: Allow external MariaDB connections (1/2)
-  ansible.builtin.lineinfile:
-    path: /etc/mysql/mariadb.conf.d/50-server.cnf
-    regexp: '^skip-external-locking'
-    line: "# skip-external-locking"
-  notify: "Restart MariaDB Serveur"
-  
-- name: Allow external MariaDB connections (2/2)
-  ansible.builtin.lineinfile:
-    path: /etc/mysql/mariadb.conf.d/50-server.cnf
-    regexp: '^bind-address'
-    line: "# bind-address"
-  notify: "Restart MariaDB Serveur"
+- name: Removes all anonymous user accounts
+  ansible.builtin.mysql_user:
+    name: ''
+    host_all: true
+    state: absent
+
+- name: Remove test database
+  ansible.builtin.mysql_db:
+    name: "test"
+    state: "absent"
   
 - name: Create MariaDB client config
   ansible.builtin.copy:
@@ -49,6 +46,12 @@
     login_password: '{{ root_password }}'
     state: import 
     target: /tmp/table.sql
+    login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: Clean temp table.sql file
+  ansible.builtin.file:
+    path: /tmp/table.sql
+    state: absent
 
 - name: "Create {{ mysql_user }} with all {{ mysql_dbname }} privileges"
   community.mysql.mysql_user:

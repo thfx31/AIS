@@ -8,3 +8,8 @@
   ansible.builtin.service:
     name: ufw
     state: started
+
+- name: "Reload UFW"
+  service:
+    name: ufw
+    state: restarted
