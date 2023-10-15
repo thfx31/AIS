@@ -30,7 +30,7 @@
     content: |
       [client]
       user=root
-      password={{ root_password }}
+      password={{ glpi_db_root_password }}
     mode: 0400  
 
 - name: Upload MariaDB table config
@@ -40,10 +40,10 @@
 
 - name: Add MariaDB table to database
   community.mysql.mysql_db:
-    name: "{{ mysql_dbname }}"
+    name: "{{ glpi_db_name }}"
     state: present
     login_user: root
-    login_password: '{{ root_password }}'
+    login_password: '{{ glpi_db_root_password }}'
     state: import 
     target: /tmp/table.sql
     login_unix_socket: /run/mysqld/mysqld.sock
@@ -53,14 +53,14 @@
     path: /tmp/table.sql
     state: absent
 
-- name: "Create {{ mysql_user }} with all {{ mysql_dbname }} privileges"
+- name: "Create {{ glpi_db_user }} with all {{ glpi_db_name }} privileges"
   community.mysql.mysql_user:
-    name: "{{ mysql_user }}"
-    password: "{{ mysql_password }}"
-    priv: "{{ mysql_dbname }}.*:ALL"
+    name: "{{ glpi_db_user }}"
+    password: "{{ glpi_db_password }}"
+    priv: "{{ glpi_db_name }}.*:ALL"
     host: localhost
     state: present
     login_user: root
-    login_password: '{{ root_password }}'
+    login_password: '{{ glpi_db_root_password }}'
     login_unix_socket: /var/run/mysqld/mysqld.sock
   notify: "Restart MariaDB Serveur"

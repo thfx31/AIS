@@ -1,0 +1,22 @@
+---
+# PHP extra packages
+php_extra_packages:
+- php-curl
+- php-gd
+- php-mbstring
+- php-intl
+- php-xml
+- php-ldap
+- php-zip
+- php-bz2
+
+# Database variables
+glpi_db_host: "localhost"
+glpi_db_port: "3306"
+glpi_db_root_password: "passwd"
+glpi_db_name: "db_glpi"
+glpi_db_user: "admin"
+glpi_db_password: "Test_34535$"
+
+# GLPI variables
+glpi_install_path: "/var/www/glpi"

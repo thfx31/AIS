@@ -3,13 +3,3 @@ http_host: test
 http_conf: test.conf
 http_port: 80
 https_port: 443
-
-extra_packages:
-- php-curl
-- php-gd
-- php-mbstring
-- php-intl
-- php-xml
-- php-ldap
-- php-zip
-- php-bz2

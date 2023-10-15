@@ -1,11 +1,11 @@
 ---
 - name: Check if GLPI directory exists
-  stat:
+  ansible.builtin.stat:
     path: "{{  glpi_install_path  }}"
   register: dir_stat
 
 - name: Check if install.php exists
-  stat:
+  ansible.builtin.stat:
     path: "{{  glpi_install_path  }}/install/install.php"
   register: install_stat
 
