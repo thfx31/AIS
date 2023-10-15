@@ -1,5 +1,1 @@
 ---
-http_host: test
-http_conf: test.conf
-http_port: 80
-https_port: 443

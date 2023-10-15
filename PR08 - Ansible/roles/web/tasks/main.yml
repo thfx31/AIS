@@ -10,10 +10,10 @@
     name: "{{ php_extra_packages }}"
     state: present
 
-# - name: Set up virtualhost
-#   ansible.builtin.template:
-#     src: templates/apache-template.conf
-    #dest: "/etc/apache2/sites-available/{{ http_conf }}"
+- name: Set up virtualhost
+  ansible.builtin.template:
+    src: templates/glpi-template.conf
+    dest: "/etc/apache2/sites-available/{{ http_conf }}"
 
 # - name: Delete default vhosts in site-enabled
 #   ansible.builtin.file:
@@ -23,10 +23,10 @@
 #   notify: Restart apache
 #   when: apache_remove_default_vhost
   
-- name: Set up virtualhost
-  ansible.builtin.template:
-    src: templates/glpi-tmp.conf
-    dest: "/etc/apache2/sites-available/glpi.conf"
+# - name: Set up virtualhost
+#   ansible.builtin.template:
+#     src: templates/glpi-tmp.conf
+#     dest: "/etc/apache2/sites-available/glpi.conf"
 
 # - name: Delete default vhosts in site-enabled
 #   ansible.builtin.file:

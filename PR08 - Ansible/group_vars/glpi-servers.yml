@@ -10,6 +10,12 @@ php_extra_packages:
 - php-zip
 - php-bz2
 
+# Apache2 settings
+http_host: "glpi.deploy"
+http_conf: "glpi.conf"
+http_port: 80
+https_port: 443
+
 # Database variables
 glpi_db_host: "localhost"
 glpi_db_port: "3306"
