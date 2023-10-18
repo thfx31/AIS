@@ -5,9 +5,9 @@
     state: present
     update_cache: yes
 
-- name: Install PHP extra packages
+- name: Install extra packages
   ansible.builtin.apt:
-    name: "{{ php_extra_packages }}"
+    name: "{{ extra_packages }}"
     state: present
 
 - name: Setup virtualhost
