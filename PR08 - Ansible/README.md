@@ -8,9 +8,9 @@ install_glpi.yml playbook will install and configure :
 Once MariaDB and Apache2 are up and running, this role performs the following actions:
 Download GLPI 10
 - Create a system user and configure the database for the WebApp
-- Configure and enables a Website in Apache2 to access GLPI
-- Configure HTTPS and generate self-signed certificates 
-
+- Configure and enable a Website in Apache2 to access GLPI
+- Configure HTTPS and generate self-signed certificates
+- Add firewall rules with UFW and install fail2ban
 
 ## Requirements
 None
