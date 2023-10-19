@@ -9,6 +9,7 @@ extra_packages:
 - php-ldap
 - php-zip
 - php-bz2
+- php-ldap
 - python3-cryptography
 
 # Apache2 vars
