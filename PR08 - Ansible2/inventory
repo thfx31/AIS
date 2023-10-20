@@ -1,0 +1,11 @@
+[ios]
+
+[ios:children]
+routers
+switches
+
+[routers]
+R01 ansible_host=172.16.3.244
+
+[switches]
+SW01 ansible_host=172.16.3.243
