@@ -1,0 +1,17 @@
+---
+- name: Backup config file
+  hosts: all
+  gather_facts: false
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: sh running config
+      cisco.ios.ios_command:
+        commands:
+          - show run
+      register: config
+
+    - name: save output to /etc/ansible/backups 
+        ansible.builtin.copy: 
+          content: "{{ config.stdout[0] }}"
+          dest: "{{  backup_path }}/show_run_{{ inventory_hostname }}.txt"   

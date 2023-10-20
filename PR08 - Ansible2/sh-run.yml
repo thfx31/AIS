@@ -1,0 +1,16 @@
+---
+- name: Show running Config
+  hosts: all
+  gather_facts: false
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: sh running config
+      cisco.ios.ios_command:
+        commands:
+          - show run
+      register: output
+
+    - name: print output
+      debug:
+        var: output.stdout_lines
