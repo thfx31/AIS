@@ -1,0 +1,28 @@
+---
+- name: Show Listing 
+  hosts: ios
+  gather_facts: false
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: Listing
+      cisco.ios.ios_command:
+        commands:
+          - show run | incl hostname
+          #- show run | incl type
+          - show run | incl ip address | excl no ip address
+          - show run | incl version | excl "ip ssh version 2"
+          #- show version | incl Version
+
+      register: output
+
+    - name: print output
+      debug:
+        var: output.stdout_lines
+
+    - name: save output to /etc/ansible/backups 
+      ansible.builtin.copy: 
+        #content: "{{ output.stdout[0][1] }}"
+        #content: "{{ output.stdout }}"
+        content: "{{ output | to_nice_json }}"
+        dest: "{{  backup_path }}/listing_{{ inventory_hostname }}.txt"   

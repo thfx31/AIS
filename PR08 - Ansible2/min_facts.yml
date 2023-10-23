@@ -1,0 +1,27 @@
+---
+- name: List minimum facts and print into file
+  hosts: ios
+  gather_facts: no
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: Collect facts
+      cisco.ios.ios_facts:
+        gather_subset: min
+
+    - name: Display results
+      ansible.builtin.debug:
+        msg:
+          - "Hostname: {{  ansible_net_hostname  }}"
+          - "Model: {{  ansible_net_model  }}"
+          - "SN: {{  ansible_net_serialnum  }}"
+          - "Image: {{  ansible_net_image  }}"
+          - "System: {{  ansible_net_system  }}"
+          - "System version: {{  ansible_net_version  }}"
+      register: output
+
+    - name: Save output to /etc/ansible/backups 
+      ansible.builtin.copy: 
+        content: "{{ output | to_nice_json }}"
+        dest: "{{  backup_path }}/listing_{{ inventory_hostname }}.min_facts"
+       
