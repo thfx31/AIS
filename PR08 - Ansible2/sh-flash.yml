@@ -1,13 +1,13 @@
 ---
-- name: Show running Config
+- name: Show flash memory
   hosts: ios
   connection: ansible.netcommon.network_cli
 
   tasks:
-    - name: sh running config
+    - name: sh flash mem
       cisco.ios.ios_command:
         commands:
-          - show run
+          - "show flash:"
       register: output
 
     - name: print output

@@ -1,0 +1,12 @@
+{
+    "changed": false,
+    "failed": false,
+    "msg": [
+        "Hostname: SW01",
+        "Model: WS-C3750-24P",
+        "SN: CAT1118NGET",
+        "Image: flash:/c3750-ipbasek9-mz.122-50.SE5/c3750-ipbasek9-mz.122-50.SE5.bin",
+        "System: ios",
+        "System version: 12.2(50)SE5"
+    ]
+}

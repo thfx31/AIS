@@ -1,6 +1,6 @@
 ---
 - name: Backup config file
-  hosts: all
+  hosts: ios
   gather_facts: false
   connection: ansible.netcommon.network_cli
 
@@ -12,6 +12,6 @@
       register: config
 
     - name: save output to /etc/ansible/backups 
-        ansible.builtin.copy: 
-          content: "{{ config.stdout[0] }}"
-          dest: "{{  backup_path }}/show_run_{{ inventory_hostname }}.txt"   
+      ansible.builtin.copy: 
+        content: "{{ config.stdout[0] }}"
+        dest: "{{  backup_path }}/config_{{ inventory_hostname }}.txt"   
