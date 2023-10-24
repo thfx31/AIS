@@ -1,0 +1,17 @@
+---
+- name: Create Trunk on FastEthernet0/24 interface
+  hosts: switches
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: Merge provided configuration with device configuration
+      cisco.ios.ios_l2_interfaces:
+        config:
+        - name: FastEthernet0/24
+          mode: trunk
+          trunk:
+            allowed_vlans: 10-20
+            native_vlan: 20
+            pruning_vlans: 10,20
+            encapsulation: dot1q
+         state: merged

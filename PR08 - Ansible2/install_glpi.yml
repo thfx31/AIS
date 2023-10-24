@@ -1,7 +1,0 @@
----
-- hosts: glpi-servers
-  
-  roles:
-    - web
-    - database
-    - glpi

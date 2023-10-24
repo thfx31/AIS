@@ -1,0 +1,40 @@
+---
+- name: Create VLAN if don’t exist on a Cisco switch
+  hosts: switches
+
+  #Change variables values
+  vars:
+    vlan_id: 35
+    vlan_name: Guest
+    interface: GigabitEthernet0/2
+
+  tasks:
+
+    #Run show VLAN id "{{ vlan_id }}" and register result.
+    - name: Collect facts about VLAN "{{ vlan_id }}" on device
+      ios_command:
+        commands: show vlan id "{{ vlan_id }}" | section enet
+      register: sh_vlan_output
+
+   #Check if VLAN it's defined, does not do anything if existing 
+    - set_fact:
+        vlan_exists: false
+      when: sh_vlan_output.stdout_lines is defined
+
+   #Check if VLAN it's undefined, if not then go for below task to Add VLAN
+    - set_fact:
+        vlan_exists: true
+      when: sh_vlan_output.stdout_lines is undefined
+  
+   #Add VLAN with name and interfaces too.
+    - name: Add VLAN using aggregate
+      cisco.ios.ios_vlan:
+        aggregate:
+        - {vlan_id: "{{ vlan_id }}", name: "{{ vlan_name }}", interfaces: "{{ interface }}"}
+
+   #Save to start-config when modified 
+    - name: save running to start-config when modified
+      ios_config:
+        save_when: modified
+
+#End of codes

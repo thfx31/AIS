@@ -9,9 +9,9 @@
       cisco.ios.ios_command:
         commands:
           - show run
-      register: config
+      register: output
 
-    - name: save output to /etc/ansible/backups 
+    - name: save output to Ansible server 
       ansible.builtin.copy: 
-        content: "{{ config.stdout[0] }}"
+        content: "{{ output.stdout[0] }}"
         dest: "{{  backup_path }}/config_{{ inventory_hostname }}.txt"   
