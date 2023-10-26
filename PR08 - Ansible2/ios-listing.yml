@@ -1,7 +1,6 @@
 ---
 - name: List minimum facts and print into file
   hosts: ios
-  gather_facts: no
   connection: ansible.netcommon.network_cli
 
   tasks:
@@ -10,7 +9,7 @@
         gather_subset: min
 
     - name: Display results
-      ansible.builtin.debug:
+      debug:
         msg:
           - "Hostname: {{  ansible_net_hostname  }}"
           - "Model: {{  ansible_net_model  }}"

@@ -9,3 +9,13 @@ R01 ansible_host=172.16.3.244
 
 [switches]
 SW01 ansible_host=172.16.3.243
+
+[ios:vars]
+ftp_ip = 172.16.3.242
+ftp_user = user01
+ftp_password = user01
+ansible_network_os = ios
+ansible_user = th.fx
+ansible_password = 556p13HY.9*
+backup_path = "./backups"
+#backup_path = "/home/thomas/AIS/PR08 - Ansible2/backups"

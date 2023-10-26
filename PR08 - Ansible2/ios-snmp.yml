@@ -1,0 +1,12 @@
+---
+- name: Configure SNMP
+  hosts: routers
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: Configure SNMP settings
+      ios_config:
+        commands:
+          - snmp-server community ansible-public RO
+          - snmp-server community ansible-private RW
+          - snmp-server community ansible-test RO

@@ -11,5 +11,5 @@
       register: output
 
     - name: print output
-      cisco.builtin.debug:
+      debug:
         var: output.stdout_lines

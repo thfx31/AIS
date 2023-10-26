@@ -1,0 +1,32 @@
+---
+- name: Backup local and TFTP configuration
+  hosts: ios
+  connection: ansible.netcommon.network_cli
+
+  tasks:
+    - name: Collect gather facts
+      cisco.ios.ios_facts:
+
+    - name: sh running config
+      cisco.ios.ios_command:
+        commands:
+          - show run
+      register: output
+
+    - name: Save output to local backup path
+      ansible.builtin.copy:
+        content: "{{output.stdout[0]}}"
+        dest: "{{  backup_path }}/running-conf_{{ inventory_hostname }}.txt"
+
+    - name: Config FTP transfert settings 
+      cisco.ios.ios_config:
+        lines:
+          - ip ftp username {{  ftp_user  }}
+          - ip ftp password {{  ftp_password  }}
+          - file prompt quiet
+   
+    - name: Save IOS image to FTP server
+      cisco.ios.ios_command:
+        commands: "copy {{  ansible_net_image  }} ftp://{{  ftp_ip  }}"
+      vars: 
+        ansible_command_timeout: 600
