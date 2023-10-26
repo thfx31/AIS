@@ -18,4 +18,3 @@ ansible_network_os = ios
 ansible_user = th.fx
 ansible_password = 556p13HY.9*
 backup_path = "./backups"
-#backup_path = "/home/thomas/AIS/PR08 - Ansible2/backups"

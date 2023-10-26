@@ -1,9 +1,0 @@
----
-# ansible_network_os: ios
-# ansible_user: th.fx
-# ansible_password: 556p13HY.9*
-# ansible_become: yes
-# ansible_become_method: enable
-# ansible_become_password: 556p13HY.9*
-
-backup_path: "/home/thomas/AIS/PR08 - Ansible2/backups"

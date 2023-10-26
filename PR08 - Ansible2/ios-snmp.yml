@@ -5,7 +5,7 @@
 
   tasks:
     - name: Configure SNMP settings
-      ios_config:
+      cisco.ios.ios_config:
         commands:
           - snmp-server community ansible-public RO
           - snmp-server community ansible-private RW

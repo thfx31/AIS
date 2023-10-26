@@ -15,7 +15,7 @@
             state: active
         state: merged
 
-    - name: Create Trunk on Fa0/24 and allow Vlans 20 and 30
+    - name: Create Trunk on Gi1/0/1 and allow Vlans 20 and 30
       cisco.ios.ios_command:
         commands:
           - conf t
