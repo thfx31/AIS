@@ -6,7 +6,7 @@
   tasks:
     - name: Configure Vlans
       cisco.ios.ios_vlans:
-        config: 
+        config:
           - name: Vlan_20
             vlan_id: 20
             state: active
