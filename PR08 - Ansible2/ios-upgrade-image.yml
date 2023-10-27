@@ -1,86 +1,92 @@
 ---
-- name: Upgrade CISCO IOS 
+- name: Upgrade CISCO IOS
   hosts: routers
   connection: ansible.netcommon.network_cli
 
-  vars: 
+  vars:
     upgrade_ios_version: 15.8(3)M2
     new_ios_file_name: c1900-universalk9-mz.SPA.158-3.M2-new.bin
 
   tasks:
     - name: Check current version
-      ios_facts:
+      cisco.ios.ios_facts:
 
-    - debug: 
-        msg: 
-        - "Current version is {{ ansible_net_version }}"
-        - "Upgrade image is 15.8(3)M2"
+    - name: Print current version
+      ansible.builtin.debug:
+        msg:
+          - "Current version is {{ ansible_net_version }}"
+          - "Upgrade image is 15.8(3)M2"
 
-    - debug: 
-        msg: 
-        - "Image is not compliant and will be upgraded"
-      when: ansible_net_version != upgrade_ios_version
+    - name: Print warning if image must to be upgrade
+      ansible.builtin.debug:
+        msg:
+          - "Image is not compliant and will be upgraded"
+        when: ansible_net_version != upgrade_ios_version
 
-    - name: Backup Running Config  
+    - name: Backup Running Config
       cisco.ios.ios_command:
-        commands: show run  
+        commands: show run
       register: config
 
     - name: Save output to {{  backup_path }}
       ansible.builtin.copy:
-        content: "{{config.stdout[0]}}"
-        dest: "{{  backup_path }}/config_{{ inventory_hostname }}.txt"
+        content: "{{ config.stdout[0] }}"
+        dest: "{{ backup_path }}/config_{{ inventory_hostname }}.txt"
+        mode: preserve
 
-    - name: Save running config 
+    - name: Save running config
       cisco.ios.ios_config:
-        save_when: always 
+        save_when: always
 
     - name: Copy new IOS from FTP // This could take up few minutes
       ansible.netcommon.cli_command:
         command: 'copy ftp://{{  ftp_user }}:{{ ftp_password }}@{{ ftp_ip }}/files/{{ new_ios_file_name }} flash:{{ new_ios_file_name }}'
-        check_all: True
+        check_all: true
         prompt:
           - 'Destination filename'
         answer:
           - '{{ new_ios_file_name }}'
-      vars: 
+      vars:
         ansible_command_timeout: 600
 
-    - name: Change Boot Variable to new image 
-      cisco.ios.ios_config: 
-        commands: 
+    - name: Change Boot Variable to new image
+      cisco.ios.ios_config:
+        commands:
           - "boot system flash:c1900-universalk9-mz.SPA.158-3.M2-new.bin"
-        save_when: always 
+        save_when: always
 
-    - name: Reload the Device 
-      ansible.netcommon.cli_command: 
+    - name: Reload the Device
+      ansible.netcommon.cli_command:
         command: reload
-        prompt: 
+        prompt:
           - confirm
-        answer: 
+        answer:
           - 'y'
-         
+
     - name: Wait for device to come back online
-      wait_for:
+      ansible.builtin.wait_for:
         host: "{{ inventory_hostname }}"
         port: 22
         delay: 90
-    
-    - name: Check Image Version      
+
+    - name: Check Image Version
       cisco.ios.ios_facts:
 
-    - debug: 
-        msg: 
-        - "Current version is {{ ansible_net_version }}"
+    - name: Print current version
+      ansible.builtin.debug:
+        msg:
+          - "Current version is {{ ansible_net_version }}"
 
     - name: Assert IOS version is correct
-   
-      vars: 
+
+      vars:
         upgrade_ios_version: 15.8(3)M2
 
-      assert:
+      ansible.builtin.assert:
         that:
-         - upgrade_ios_version == ansible_net_version
-    - debug: 
-        msg: 
-        - "Software Upgrade has been completed"  
+          - upgrade_ios_version == ansible_net_version
+
+    - name: Print upgrade result
+      ansible.builtin.debug:
+        msg:
+          - "Software Upgrade has been completed"
